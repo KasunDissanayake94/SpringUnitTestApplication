@@ -1,0 +1,91 @@
+What's the difference between @AutoConfigureWebMvc and @AutoConfigureMockMvc?
+================================================================================
+@AutoConfigureWebMvc
+Use this if you need to configure the web layer for testing but don't need to use MockMvc
+
+It enables all auto-configuration related to the web layer and ONLY the web layer. This is a subset of overall auto-configuration.
+
+@AutoConfigureMockMvc
+Use this when you just want to configure MockMvc
+
+Enables all auto-configuration related to MockMvc and ONLY MockMvc. Again, this is a subset of overall auto-configuration.
+
+@WebMvcTest
+Includes both the @AutoConfigureWebMvc and the @AutoConfigureMockMvc, among other functionality.
+
+What are the differences between @Runwith(SpringRunner.class) & @SpringBootTest?
+===================================================================================
+@RunWith(SpringRunner.class) : You need this annotation to just enable spring boot features like @Autowire, @MockBean etc.. during junit testing
+
+This is used to provide a bridge between Spring Boot test features and JUnit. Whenever we are using any Spring Boot testing features in our JUnit tests,
+ this annotation will be required.
+
+ @SpringBootTest : This annotation is used to load complete application context for end to end integration testing.
+ The @SpringBootTest annotation can be used when we need to bootstrap the entire container. The annotation works by creating the ApplicationContext that
+  will be utilized in our tests.
+
+  Difference between @Mock, @MockBean and Mockito.mock()
+  =======================================================
+At the end its easy to explain. If you just look into the javadocs of the annotations you will see the differents:
+
+------> @Mock: (org.mockito.Mock)
+
+Mark a field as a mock.
+
+* Allows shorthand mock creation.
+* Minimizes repetitive mock creation code.
+* Makes the test class more readable.
+* Makes the verification error easier to read because the field name is used to identify the mock.
+
+ -----> @MockBean: (org.springframework.boot.test.mock.mockito.MockBean)
+
+Annotation that can be used to add mocks to a Spring ApplicationContext. Can be used as a class level annotation or on fields in either @Configuration classes,
+ or test classes that are @RunWith the SpringRunner.
+
+Mocks can be registered by type or by bean name. Any existing single bean of the same type defined in the context will be replaced by the mock, if no existing
+ bean is defined a new one will be added.
+
+When @MockBean is used on a field, as well as being registered in the application context, the mock will also be injected into the field.
+
+Mockito.mock()
+
+Its just the representation of a @Mock.
+
+What does @Configuration *really* mean in Spring Boot?
+========================================================
+
+It clearly states that a class having @Configuration annotation tells Spring container that there is one or more beans that needs to be dealt with on runtime.
+Depending upon your type of configuration i.e. Web or Non-Web, Spring bootstrap your @Configuration classes with the context.
+
+Being said, you can do this configuration either via xml configuration file(s) or java based annotations (which is preferred, readable and easier).
+
+You can read what else @Configuration annotated classes can do from the referenced documentation as well.
+
+What is the difference between @Configuration and @Component in Spring?
+=======================================================================
+
+@Configuration - It is like beans.xml but java based bean configuration. It means class annotated with this annotation is the place where beans are configured which will be candidate for auto-detection. In this class, methods are annotated with @Bean which return object of the class.
+
+Example:
+
+@Configuration
+public class ConfigClass {
+
+    @Bean
+    public UserClass getObject() {
+        return new UserClass();
+    }
+}
+@Component - You cannot autowire (@Autowire) any class if it is not marked with @Component. It means when you want to autowire any class using annotation that class should be annotated with @Component.
+
+Example:
+
+@Component
+public class A { .... }
+
+public class B {
+    @Autowired
+    A a;
+    .....
+    .....
+}
