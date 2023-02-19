@@ -1,32 +1,34 @@
 package com.spring.unittest.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "student")
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+
 public class Student implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank
+    @NotNull
     private String name;
 
-    @NotBlank
+    @NotNull
     private int age;
 
-    @NotBlank
+    @NotNull
     private String address;
 
-    @NotBlank
+    @NotNull
     @Column(unique = true)
     private String email;
 
